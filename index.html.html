@@ -1,255 +1,1426 @@
+
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QRGen - Smart Emergency Profile</title>
+    <meta name="theme-color" content="#102c2c">
+    <title>QRGen | Your Safety. One Scan Away.</title>
+    <meta name="description" content="QRGen Smart Safety Keychain. One scan connects you to your emergency contacts. Stay connected, stay protected.">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        brandDark: '#1a232a',
-                        brandCard: '#243038',
-                        brandTeal: '#008b8b',
-                        brandTealHover: '#00a8a8',
-                        brandGold: '#d4af37',
+                        dark: '#102c2c',
+                        teal: '#087f80',
+                        gold: '#d6ad55',
+                        cream: '#f7f6f1'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
                     }
                 }
             }
         }
     </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f7f6f1;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #e6c77e, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-bg {
+            background:
+                radial-gradient(circle at 80% 30%, rgba(8,127,128,.24), transparent 35%),
+                radial-gradient(circle at 10% 90%, rgba(214,173,85,.12), transparent 30%),
+                #102c2c;
+        }
+
+        .product-shadow {
+            box-shadow: 0 25px 80px rgba(0,0,0,.18);
+        }
+
+        .glass {
+            background: rgba(255,255,255,.08);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,.12);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: .7s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg,#d6ad55,#f0d28e);
+            color: #102c2c;
+            transition: .3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(214,173,85,.25);
+        }
+
+        .nav-link:after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: #d6ad55;
+            transition: .3s;
+        }
+
+        .nav-link:hover:after { width: 100%; }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height .35s ease;
+        }
+
+        .faq-answer.open {
+            max-height: 200px;
+        }
+
+        #qrcode img, #qrcode canvas {
+            margin: auto;
+            max-width: 100%;
+        }
+
+        @media(max-width: 640px) {
+            .hero-title { font-size: 42px; }
+        }
+
+        /* QRGEN 3D SPHERE GALLERY */
+#qr-sphere-gallery {
+    background: #f7f6f1;
+    overflow: hidden;
+}
+
+#qr-sphere-gallery .qr-sphere-gallery-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 80px 20px;
+    padding-top: 0px;
+}
+
+#qr-sphere-gallery .qr-sphere-gallery-heading {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+#qr-sphere-gallery .qr-sphere-gallery-heading h2 {
+    color: #0b383e;
+    font-size: clamp(30px, 5vw, 48px);
+    font-weight: 900;
+}
+
+#qr-sphere-gallery .qr-sphere-gallery-heading p {
+    color: #6b7280;
+    margin-top: 12px;
+}
+
+#qr-sphere-gallery .qr-sphere-stage {
+    width: 100%;
+    height: 560px;
+    position: relative;
+    perspective: 1200px;
+    overflow: hidden;
+    cursor: grab;
+    touch-action: pan-y;
+    user-select: none;
+}
+
+#qr-sphere-gallery .qr-sphere-stage:active {
+    cursor: grabbing;
+}
+
+#qr-sphere-gallery .qr-sphere-item {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 155px;
+    height: 210px;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #ffffff;
+    border: 3px solid #ffffff;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
+    cursor: pointer;
+    will-change: transform;
+    transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+#qr-sphere-gallery .qr-sphere-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+}
+
+#qr-sphere-gallery .qr-sphere-item.active {
+    border-color: #d6ad55;
+    box-shadow: 0 0 25px rgba(214, 173, 85, 0.55);
+}
+
+#qr-sphere-gallery .qr-sphere-controls {
+    text-align: center;
+    color: #0b383e;
+    font-size: 13px;
+    margin-top: 10px;
+}
+
+@media (max-width: 640px) {
+    #qr-sphere-gallery .qr-sphere-stage {
+        height: 440px;
+    }
+
+    #qr-sphere-gallery .qr-sphere-item {
+        width: 115px;
+        height: 155px;
+    }
+}
+    </style>
 </head>
-<body class="bg-brandDark text-gray-100 font-sans min-h-screen flex flex-col justify-between selection:bg-brandGold selection:text-brandDark">
 
-    <header class="bg-brandCard/80 backdrop-blur-md border-b border-brandGold/30 sticky top-0 z-50 transition">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 sm:py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-tr from-brandTeal to-brandGold p-0.5 flex items-center justify-center shadow-lg">
-                    <div class="bg-brandDark w-full h-full rounded-[7px] flex items-center justify-center text-brandGold font-bold text-xl overflow-hidden p-1">
-                        <img src="logo.png" alt="Logo" class="w-full h-full object-contain">
-                    </div>
-                </div>
-            </div>
-            <nav class="hidden md:flex space-x-8 text-sm font-semibold">
-                <a href="#about" class="hover:text-brandGold transition">About Us</a>
-                <a href="#Scenario" class="hover:text-brandGold transition">Scenario</a>
-                <a href="#demo-video" class="hover:text-brandGold transition">Watch Video</a>
-                <a href="#contact" class="hover:text-brandGold transition">Contact</a>
-            </nav>
-            <a href="#generator" class="bg-gradient-to-r from-brandTeal to-teal-600 hover:from-brandTealHover hover:to-teal-500 text-white px-3.5 sm:px-5 py-1.5 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm shadow-lg shadow-brandTeal/20 transition transform active:scale-95">
-                Get Started
-            </a>
-        </div>
-    </header>
+<body class="text-gray-800">
 
-    <section class="relative py-8 sm:py-20 overflow-hidden" id="about">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-            <div class="flex justify-center mb-3 sm:mb-4">
-                <img src="logo.png" alt="QRGen Logo" class="w-16 h-16 sm:w-24 sm:h-24 object-contain">
+<!-- NAVBAR -->
+<header class="sticky top-0 z-50 bg-dark/95 backdrop-blur-xl border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-5 py-4 flex justify-between items-center">
+
+        <a href="#" class="flex items-center gap-3">
+            <img src="images/logo.png" alt="QRGen" class="w-11 h-11 object-contain">
+            <div>
+                <h1 class="text-white font-black text-2xl tracking-wider">QR<span class="text-gold">GEN</span></h1>
+                <p class="text-gray-400 text-[9px] tracking-[3px]">SMART SAFETY</p>
             </div>
-            
-            <span class="inline-block px-3 py-1 sm:px-4 sm:py-1.5 bg-brandGold/10 border border-brandGold/40 text-brandGold text-[11px] sm:text-sm font-semibold rounded-full mb-3 sm:mb-4">
-                Paniic nahi, scan karo bro! ⚡
-            </span>
-            <h1 class="text-2xl sm:text-6xl font-extrabold tracking-tight mb-4 sm:mb-6 text-white leading-tight">
-                Emergency Safety Profile <br><span class="bg-gradient-to-r from-brandTeal via-teal-300 to-brandGold bg-clip-text text-transparent">Just One Scan Away</span>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-200">
+            <a href="#home" class="nav-link">Home</a>
+            <a href="#features" class="nav-link">Features</a>
+            <a href="#how-it-works" class="nav-link">How It Works</a>
+            <a href="#qr-sphere-gallery" class="block hover:text-gold">Collection</a>
+            <a href="#faq" class="nav-link">FAQs</a>
+        </nav>
+
+        <a href="#order" class="hidden md:block btn-primary px-6 py-3 rounded-full text-sm font-bold">
+            Get Your QRGen <i class="fa-solid fa-arrow-right ml-2"></i>
+        </a>
+
+        <button id="menuBtn" class="md:hidden text-white text-2xl" aria-label="Open menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </div>
+
+    <div id="mobileMenu" class="hidden md:hidden px-6 pb-6 space-y-4 text-white">
+        <a href="#home" class="block">Home</a>
+        <a href="#features" class="block">Features</a>
+        <a href="#how-it-works" class="block">How It Works</a>
+        <a href="#qr-sphere-gallery" class="block hover:text-gold">Collection</a>
+        <a href="#faq" class="block">FAQs</a>
+        <a href="#order" class="block text-gold font-bold">Get Your QRGen</a>
+    </div>
+</header>
+
+
+<!-- HERO -->
+<section id="home" class="hero-bg text-white overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 py-10 pb-12 lg:py-12 lg:pb-12 grid lg:grid-cols-2 gap-16 ">
+
+        <div class="reveal active">
+            <div class="inline-flex items-center gap-2 glass rounded-full px-4 py-2 mb-7">
+                <span class="w-2 h-2 rounded-full bg-gold"></span>
+                <span class="text-xs sm:text-sm text-gray-200">SMART SAFETY. SIMPLE TECHNOLOGY.</span>
+            </div>
+
+            <h1 class="hero-title text-5xl lg:text-7xl font-black leading-tight mb-7">
+                Because Every <span class="gradient-text">Second</span> Matters.
             </h1>
-            <p class="text-gray-300 max-w-2xl mx-auto text-sm sm:text-lg mb-6 sm:mb-8 leading-relaxed">
-                Generate custom QR codes for your keychains, helmet, or kids' school bags. Direct phone dialing, WhatsApp connectivity, and Google Maps location instantly!
+
+            <p class="text-gray-300 text-base sm:text-lg leading-8 max-w-xl mb-9">
+                What if one small keychain could make a big difference in an emergency?
+
+                QRGen connects the people who need help with the people who can help — with just one scan.
             </p>
-            <div class="flex flex-wrap justify-center gap-4">
-                <a href="#demo-video" class="bg-brandCard border border-gray-600 hover:border-brandTeal font-bold px-6 py-2.5 sm:px-8 sm:py-3.5 rounded-xl text-sm sm:text-base transition flex items-center gap-2">
-                    <i class="fa-solid fa-circle-play text-brandTeal text-lg sm:text-xl"></i> Watch Demo
+
+            <div class="flex flex-wrap gap-4">
+                <a href="#order" class="btn-primary rounded-full px-8 py-4 font-bold">
+                    Get Your Safety Keychain
+                    <i class="fa-solid fa-arrow-right ml-2"></i>
+                </a>
+
+                <a href="#demo-video" class="border border-white/30 hover:bg-white/10 rounded-full px-8 py-4 font-semibold transition">
+                    <i class="fa-solid fa-play mr-2 text-gold"></i> Discover How
                 </a>
             </div>
         </div>
-    </section>
 
-    <div id="Scenario"></div>
-    <section class="max-w-6xl mx-auto px-4 py-8 sm:py-14">
-        <div class="text-center mb-8 sm:mb-12">
-            <h2 class="text-2xl sm:text-4xl font-extrabold text-white">
-                Emergency Use Cases
+        <div class="relative reveal">
+            <div class="absolute inset-0 bg-teal/20 blur-[100px] rounded-full"></div>
+
+            <div class="relative glass rounded-[35px] p-5 sm:p-9 product-shadow">
+                <div class="flex justify-between items-center mb-8">
+                    <span class="text-sm text-gray-300 font-semibold">QRGEN SMART KEYCHAIN</span>
+                    <span class="text-gold text-xs border border-gold/40 rounded-full px-3 py-1">SAFETY SERIES</span>
+                </div>
+
+                <div class="bg-gradient-to-br from-gray-200 to-gray-400 rounded-3xl h-72 flex items-center justify-center relative overflow-hidden">
+                    <div class="absolute w-72 h-72 border border-white/30 rounded-full"></div>
+                    <div class="absolute w-56 h-56 border border-white/30 rounded-full"></div>
+
+                    <!-- <div class="relative bg-dark p-5 rounded-2xl shadow-2xl rotate-[-8deg]">
+                        <img src="images/1.jfif" alt="keychain-image" class="">
+                    </div> -->
+                    <!-- <div class="relative bg-dark p-5 rounded-2xl shadow-2xl rotate-[-8deg] w-52 h-64 flex items-center justify-center overflow-hidden">
+                        <img
+                            src="images/1.jfif"
+                            alt="keychain-image"
+                            class="w-full h-full object-contain max-w-full max-h-full"
+                        >
+                    </div> -->
+                    <div class="relative bg-dark p-5 rounded-2xl shadow-2xl rotate-[-8deg] w-52 h-64 flex items-center justify-center overflow-hidden">
+                        <img
+                            id="keychainSlider"
+                            src="images/1.jfif"
+                            alt="QRGen Smart Keychain"
+                            class="w-full h-full object-contain max-w-full max-h-full opacity-100 transition-opacity duration-700"
+                        >
+                    </div>
+
+                    <div class="absolute right-5 bottom-5 bg-white/90 rounded-xl px-4 py-3 text-dark shadow-lg">
+                        <i class="fa-solid fa-shield-heart text-teal mr-2"></i>
+                        <span class="font-bold text-xs">Stay Protected</span>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center mt-7">
+                    <div>
+                        <h3 class="text-white font-bold text-xl">Your Personal Safety Companion</h3>
+                        <p class="text-gray-400 text-xs mt-2">Small accessory. Meaningful purpose.</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-gold text-2xl"></i>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="flex gap-5 px-6 mt-14 border-t border-white/10 py-8 max-w-7xl mx-auto justify-around">
+                <div>
+                    <h3 class="text-gold font-black text-xl">1 Scan</h3>
+                    <p class="text-gray-400 text-xs mt-1">Quick access</p>
+                </div>
+                <div>
+                    <h3 class="text-gold font-black text-xl">24/7</h3>
+                    <p class="text-gray-400 text-xs mt-1">Profile access*</p>
+                </div>
+                <div>
+                    <h3 class="text-gold font-black text-xl">Smart</h3>
+                    <p class="text-gray-400 text-xs mt-1">Safety solution</p>
+                </div>
+    </div>
+</section>
+
+
+<!-- TRUST BAR -->
+<section class="bg-white border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-6 py-8 grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="flex items-center justify-center gap-3">
+            <i class="fa-solid fa-qrcode text-teal text-2xl"></i>
+            <span class="font-bold text-sm">QR-Based Access</span>
+        </div>
+        <div class="flex items-center justify-center gap-3">
+            <i class="fa-solid fa-phone text-teal text-2xl"></i>
+            <span class="font-bold text-sm">Emergency Contacts</span>
+        </div>
+        <div class="flex items-center justify-center gap-3">
+            <i class="fa-solid fa-mobile-screen text-teal text-2xl"></i>
+            <span class="font-bold text-sm">Smartphone Friendly</span>
+        </div>
+        <div class="flex items-center justify-center gap-3">
+            <i class="fa-solid fa-heart text-teal text-2xl"></i>
+            <span class="font-bold text-sm">Made for Safety</span>
+        </div>
+    </div>
+</section>
+
+
+<!-- FEATURES -->
+<section id="features" class="py-24">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+            <span class="text-teal font-bold text-sm tracking-widest uppercase">Why QRGen?</span>
+            <h2 class="text-3xl sm:text-5xl font-black text-dark mt-4 leading-tight">
+                More Than Just a Keychain.
             </h2>
-            <p class="text-gray-400 mt-2 text-xs sm:text-base">
-                One simple scan can make all the difference in crucial moments.
+            <p class="text-gray-500 mt-5 leading-7">
+                A simple way to make important emergency contact information accessible when it matters most.
             </p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-            
-            <div class="bg-gray-800 rounded-2xl p-5 sm:p-6 border border-gray-700 shadow-xl hover:border-amber-400 transition-all duration-300 flex flex-col justify-between">
-                <div>
-                    <div class="w-12 h-12 sm:w-16 sm:h-16 bg-amber-500/10 rounded-full flex items-center justify-center mb-4 sm:mb-6 border border-amber-500/30">
-                        <i class="fa-solid fa-child text-2xl sm:text-3xl text-amber-400"></i>
-                    </div>
-                    <span class="bg-amber-400/20 text-amber-300 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Scenario 01</span>
-                    <h3 class="text-xl sm:text-2xl font-bold text-white mt-3 mb-2">Child Lost?</h3>
-                    <p class="text-gray-400 text-xs sm:text-sm leading-relaxed mb-6">
-                        If a child gets lost in a crowded mall or public place, there's no need to panic. Anyone can scan the QR code on the child's keychain to instantly contact their parents.
-                    </p>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <div class="reveal bg-white p-8 rounded-3xl border border-gray-100 hover:shadow-xl transition">
+                <div class="w-14 h-14 bg-teal/10 rounded-2xl flex items-center justify-center text-teal text-2xl">
+                    <i class="fa-solid fa-qrcode"></i>
                 </div>
-                <div class="bg-gray-900/60 p-3.5 sm:p-4 rounded-xl border border-gray-700/50 flex items-center gap-3">
-                    <i class="fa-solid fa-qrcode text-amber-400 text-lg sm:text-xl"></i>
-                    <span class="text-xs text-gray-300">Instant access to parents' contact details via scan</span>
-                </div>
+                <h3 class="font-black text-xl mt-6 mb-3">Instant QR Scanning</h3>
+                <p class="text-gray-500 text-sm leading-7">
+                    Anyone with a compatible smartphone camera can scan your QR code and access your emergency profile.
+                </p>
             </div>
 
-            <div class="bg-gray-800 rounded-2xl p-5 sm:p-6 border border-gray-700 shadow-xl hover:border-teal-400 transition-all duration-300 flex flex-col justify-between">
-                <div>
-                    <div class="w-12 h-12 sm:w-16 sm:h-16 bg-teal-500/10 rounded-full flex items-center justify-center mb-4 sm:mb-6 border border-teal-500/30">
-                        <i class="fa-solid fa-user-nurse text-2xl sm:text-3xl text-teal-400"></i>
-                    </div>
-                    <span class="bg-teal-400/20 text-teal-300 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Scenario 02</span>
-                    <h3 class="text-xl sm:text-2xl font-bold text-white mt-3 mb-2">Unconscious / Medical Emergency?</h3>
-                    <p class="text-gray-400 text-xs sm:text-sm leading-relaxed mb-6">
-                        In case someone faints or experiences a sudden medical emergency in public, bystanders can scan the QR code on their bag or keychain to immediately alert their family.
-                    </p>
+            <div class="reveal bg-white p-8 rounded-3xl border border-gray-100 hover:shadow-xl transition">
+                <div class="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center text-amber-600 text-2xl">
+                    <i class="fa-solid fa-phone-volume"></i>
                 </div>
-                <div class="bg-gray-900/60 p-3.5 sm:p-4 rounded-xl border border-gray-700/50 flex items-center gap-3">
-                    <i class="fa-solid fa-phone-volume text-teal-400 text-lg sm:text-xl"></i>
-                    <span class="text-xs text-gray-300">Direct connection with family without delay</span>
-                </div>
+                <h3 class="font-black text-xl mt-6 mb-3">Emergency Contacts</h3>
+                <p class="text-gray-500 text-sm leading-7">
+                    Make primary and secondary emergency contact details accessible through your safety profile.
+                </p>
             </div>
 
-            <div class="bg-gray-800 rounded-2xl p-5 sm:p-6 border border-gray-700 shadow-xl hover:border-red-400 transition-all duration-300 flex flex-col justify-between">
-                <div>
-                    <div class="w-12 h-12 sm:w-16 sm:h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-4 sm:mb-6 border border-red-500/30">
-                        <i class="fa-solid fa-kit-medical text-2xl sm:text-3xl text-red-400"></i>
-                    </div>
-                    <span class="bg-red-400/20 text-red-300 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Scenario 03</span>
-                    <h3 class="text-xl sm:text-2xl font-bold text-white mt-3 mb-2">Road Accident?</h3>
-                    <p class="text-gray-400 text-xs sm:text-sm leading-relaxed mb-6">
-                        In the event of a road accident, paramedics or helpful bystanders can scan the QR code on a helmet or bike key to retrieve vital emergency contact details instantly.
-                    </p>
+            <div class="reveal bg-white p-8 rounded-3xl border border-gray-100 hover:shadow-xl transition">
+                <div class="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center text-purple-600 text-2xl">
+                    <i class="fa-solid fa-location-dot"></i>
                 </div>
-                <div class="bg-gray-900/60 p-3.5 sm:p-4 rounded-xl border border-gray-700/50 flex items-center gap-3">
-                    <i class="fa-solid fa-truck-medical text-red-400 text-lg sm:text-xl"></i>
-                    <span class="text-xs text-gray-300">Instant access to emergency SOS contact info</span>
+                <h3 class="font-black text-xl mt-6 mb-3">Address Information</h3>
+                <p class="text-gray-500 text-sm leading-7">
+                    Provide important address information to help others understand where to reach your family.
+                </p>
+            </div>
+
+            <div class="reveal bg-white p-8 rounded-3xl border border-gray-100 hover:shadow-xl transition">
+                <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center text-green-600 text-2xl">
+                    <i class="fa-solid fa-users"></i>
                 </div>
+                <h3 class="font-black text-xl mt-6 mb-3">Safety Purpose</h3>
+                <p class="text-gray-500 text-sm leading-7">
+                    A useful safety accessory for children, parents, elderly family members, Pets, Specially-abled, Tourists and everyday commuters.
+                </p>
+            </div>
+
+            <div class="reveal bg-white p-8 rounded-3xl border border-gray-100 hover:shadow-xl transition">
+                <div class="w-14 h-14 bg-indigo-100 rounded-2xl flex items-center justify-center text-indigo-600 text-2xl">
+                    <i class="fa-solid fa-id-card"></i>
+                </div>
+                <h3 class="font-black text-xl mt-6 mb-3">Personalized QR Identity</h3>
+                <p class="text-gray-500 text-sm leading-7">
+                    Every QRGen keychain comes with a unique QR code linked to an individual's emergency profile, making information easy to access when needed.
+                </p>
+            </div>
+
+            <div class="reveal bg-white p-8 rounded-3xl border border-gray-100 hover:shadow-xl transition">
+                <div class="w-14 h-14 bg-pink-100 rounded-2xl flex items-center justify-center text-pink-600 text-2xl">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                </div>
+                <h3 class="font-black text-xl mt-6 mb-3">Everyday Portability</h3>
+                <p class="text-gray-500 text-sm leading-7">
+                    Attach your QRGen accessory to your keys, bag or other compatible belongings.
+                </p>
             </div>
 
         </div>
-    </section>
+    </div>
+</section>
 
-    <section id="demo-video" class="py-10 sm:py-16 bg-brandCard/50 border-y border-gray-800">
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works" class="bg-dark text-white py-24">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16 reveal">
+            <span class="text-gold text-sm font-bold tracking-widest">SIMPLE. SMART. CONNECTED.</span>
+            <h2 class="text-3xl sm:text-5xl font-black mt-4">How QRGen Works</h2>
+            <p class="text-gray-400 mt-4">Three simple steps to make your emergency information accessible.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-10">
+
+            <div class="reveal text-center">
+                <div class="w-24 h-24 rounded-full glass mx-auto flex items-center justify-center text-gold text-4xl">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+                <div class="text-gold font-black text-sm mt-7">STEP 01</div>
+                <h3 class="text-xl font-bold mt-3">Provide Your Profile</h3>
+                <p class="text-gray-400 text-sm mt-3 leading-7">
+                    Provide your personal details and emergency contact information to your QRGen safety profile.
+                </p>
+            </div>
+
+            <div class="reveal text-center">
+                <div class="w-24 h-24 rounded-full glass mx-auto flex items-center justify-center text-gold text-4xl">
+                    <i class="fa-solid fa-link"></i>
+                </div>
+                <div class="text-gold font-black text-sm mt-7">STEP 02</div>
+                <h3 class="text-xl font-bold mt-3">Get Your QRGen</h3>
+                <p class="text-gray-400 text-sm mt-3 leading-7">
+                    Your unique QR code is linked to your emergency profile and placed on your personalized accessory.
+                </p>
+            </div>
+
+            <div class="reveal text-center">
+                <div class="w-24 h-24 rounded-full glass mx-auto flex items-center justify-center text-gold text-4xl">
+                    <i class="fa-solid fa-camera"></i>
+                </div>
+                <div class="text-gold font-black text-sm mt-7">STEP 03</div>
+                <h3 class="text-xl font-bold mt-3">Scan & Connect</h3>
+                <p class="text-gray-400 text-sm mt-3 leading-7">
+                    When help is needed, someone scans the code and accesses the available emergency contact information.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- VIDEO SECTION -->
+<section id="demo-video" class="py-10 sm:py-16 bg-cream">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2 sm:mb-3">See How QRGen Works</h2>
-            <p class="text-gray-400 mb-6 sm:mb-8 text-xs sm:text-base">See how an emergency responder can contact your family with just one click.</p>
-            
+            <div class="text-center max-w-2xl mx-auto mb-16 reveal active">
+                <span class="text-teal font-bold text-sm tracking-widest uppercase">
+                    Product Demo
+                </span>
+                <h2 class="text-3xl sm:text-5xl font-black text-dark mt-4 leading-tight">See QRGen in Action</h2>
+                <p class="text-gray-500 mt-5 leading-7">Discover how QRGen makes emergency information accessible in seconds. 
+                    One quick scan connects a responder to the essential details needed 
+                    to contact your loved ones.
+                </p>
+            </div>
             <div class="relative aspect-video rounded-2xl overflow-hidden border-2 border-brandGold/30 shadow-2xl bg-black">
-                <iframe class="w-full h-full" src="video.mp4" title="QRGen Emergency Profile Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe class="w-full h-full" src="video.mp4" title="QRGen Emergency Profile Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
             </div>
         </div>
-    </section>
+</section>
 
-    <section id="contact" class="py-10 sm:py-16 bg-brandCard/40 border-t border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
-                
-                <div class="space-y-2">
-                    <div class="flex items-center justify-center md:justify-start gap-2 text-2xl font-black text-white">
-                         <div style="display: flex;justify-content: center;"><img src="logo.png" width="300px" height="300px"></div>
-                          <p class="text-gray-400 text-xs sm:text-sm">
-                        Paniic nahi, scan karo bro! Smart profiles built for instant emergency response and safety keychain integration.
+
+<!-- WHO NEEDS QRGEN SECTION -->
+<section id="who-needs-qrgen" class="py-20 px-6 bg-white">
+  <div class="max-w-7xl mx-auto">
+
+    <div class="text-center max-w-2xl mx-auto mb-14">
+      <span class="text-[#b58b45] font-semibold tracking-[3px] uppercase text-sm">
+        Safety For Everyone
+      </span>
+
+      <h2 class="text-3xl md:text-5xl font-bold text-[#0b383e] mt-4 mb-5">
+        Who Needs QRGen?
+      </h2>
+
+      <p class="text-gray-600 text-lg leading-relaxed">
+        Safety has no age limit. QRGen helps people and pet
+        owners keep important identification and emergency
+        contact information accessible.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+      <!-- Children -->
+      <div class="group rounded-2xl overflow-hidden bg-[#f8f7f2] shadow-sm hover:shadow-xl transition">
+        <img src="images/kids.png"
+          alt="Children" class="w-full h-52 object-cover group-hover:scale-105 transition duration-500"/>
+        <div class="p-5">
+          <h3 class="text-lg font-bold text-[#0b383e] mb-2">Children & Kids</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Help children stay connected to their families when they get separated in crowded places.
+          </p>
+        </div>
+      </div>
+
+      <!-- Elderly -->
+      <div class="group rounded-2xl overflow-hidden bg-[#f8f7f2] shadow-sm hover:shadow-xl transition">
+        <img src="images/senior.jfif"
+          alt="Senior citizens" class="w-full h-52 object-cover group-hover:scale-105 transition duration-500"/>
+        <div class="p-5">
+          <h3 class="text-lg font-bold text-[#0b383e] mb-2">Senior Citizens</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Keep family contact details accessible for elderly loved ones.
+          </p>
+        </div>
+      </div>
+
+      <!-- Pets -->
+      <div class="group rounded-2xl overflow-hidden bg-[#f8f7f2] shadow-sm hover:shadow-xl transition">
+        <img src="images/pets.jfif"
+          alt="Pet dog" class="w-full h-52 object-cover group-hover:scale-105 transition duration-500"/>
+        <div class="p-5">
+          <h3 class="text-lg font-bold text-[#0b383e] mb-2">Pets</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Make it easier for someone who finds your lost pet to contact you.
+          </p>
+        </div>
+      </div>
+
+      <!-- Memory Support -->
+      <div class="group rounded-2xl overflow-hidden bg-[#f8f7f2] shadow-sm hover:shadow-xl transition">
+        <img src="images/memory.jfif"
+          alt="Family support" class="w-full h-52 object-cover group-hover:scale-105 transition duration-500"/>
+        <div class="p-5">
+          <h3 class="text-lg font-bold text-[#0b383e] mb-2">Memory Support</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Help individuals with memory difficulties stay connected with loved ones.
+          </p>
+        </div>
+      </div>
+
+      <!-- Special Support Needs -->
+      <div class="group rounded-2xl overflow-hidden bg-[#f8f7f2] shadow-sm hover:shadow-xl transition">
+        <img src="images/special.jfif"
+          alt="Personal support" class="w-full h-52 object-cover group-hover:scale-105 transition duration-500"/>
+        <div class="p-5">
+          <h3 class="text-lg font-bold text-[#0b383e] mb-2">Special Support Needs</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Keep essential identification and emergency contacts accessible.
+          </p>
+        </div>
+      </div>
+
+      <!-- Travelers -->
+      <div class="group rounded-2xl overflow-hidden bg-[#f8f7f2] shadow-sm hover:shadow-xl transition">
+        <img src="https://images.unsplash.com/photo-1472396961693-142e6e269027?w=800"
+          alt="Travelers outdoors" class="w-full h-52 object-cover group-hover:scale-105 transition duration-500"/>
+        <div class="p-5">
+          <h3 class="text-lg font-bold text-[#0b383e] mb-2">Travelers & Tourists</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Keep emergency contact information available while exploring unfamiliar places.
+          </p>
+        </div>
+      </div>
+
+      <!-- Drivers -->
+      <div class="group rounded-2xl overflow-hidden bg-[#f8f7f2] shadow-sm hover:shadow-xl transition">
+        <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=800"
+          alt="Motorcyclist" class="w-full h-52 object-cover group-hover:scale-105 transition duration-500"/>
+        <div class="p-5">
+          <h3 class="text-lg font-bold text-[#0b383e] mb-2">Drivers & Motorcyclists</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Make emergency contact information easier to access during roadside emergencies.
+          </p>
+        </div>
+      </div>
+
+      <!-- Students -->
+      <div class="group rounded-2xl overflow-hidden bg-[#f8f7f2] shadow-sm hover:shadow-xl transition">
+        <img src="images/commuters.jfif"
+          alt="University students" class="w-full h-52 object-cover group-hover:scale-105 transition duration-500"/>
+        <div class="p-5">
+          <h3 class="text-lg font-bold text-[#0b383e] mb-2">Daily Commuters</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            An extra layer of accessible identification for everyday journeys.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="text-center mt-12">
+      <p class="text-[#0b383e] text-xl font-semibold mb-3">
+        Because peace of mind matters for everyone.
+      </p>
+
+      <a href="#qr-sphere-gallery"
+        class="inline-block bg-[#0b383e] hover:bg-[#14545a] text-white px-8 py-4 rounded-full font-semibold transition">
+        Explore Our Collection
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+
+
+<!-- PRODUCT CTA -->
+<section id="order" class="pb-24 bg-white">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="bg-dark rounded-[35px] overflow-hidden relative">
+            <div class="absolute right-0 top-0 w-80 h-80 bg-teal/20 blur-[100px]"></div>
+
+            <div class="relative grid md:grid-cols-2 gap-10 items-center p-8 sm:p-14">
+
+                <div class="reveal">
+                    <span class="text-gold font-bold text-xs tracking-widest">YOUR SAFETY COMPANION</span>
+                    <h2 class="text-white text-4xl sm:text-5xl font-black mt-5 leading-tight">
+                        A Small Step Towards <span class="gradient-text">Greater Safety.</span>
+                    </h2>
+                    <p class="text-gray-300 mt-6 leading-8">
+                        Don't wait for an emergency to think about safety. Make your important contact information accessible with QRGen.
                     </p>
+
+                    <div class="mt-8 space-y-4 text-sm text-gray-300">
+                        <p><i class="fa-solid fa-check text-gold mr-3"></i> Personalized QR safety accessory</p>
+                        <p><i class="fa-solid fa-check text-gold mr-3"></i> Linked emergency contact profile</p>
+                        <p><i class="fa-solid fa-check text-gold mr-3"></i> Easy scanning with compatible smartphones</p>
+                        <p><i class="fa-solid fa-check text-gold mr-3"></i> Customization options</p>
                     </div>
-                   
-                </div>
 
-                <div class="space-y-3">
-                    <h3 class="text-white font-bold text-base border-b border-brandTeal/40 pb-2 inline-block">Social Media Links</h3>
-                    <ul class="mt-2 text-sm text-gray-300 flex items-center justify-center md:justify-start gap-4">
-                        <li class="flex items-center justify-center">
-                            <a href="https://www.facebook.com/share/199sh1EPkL/" class="hover:text-blue-500 transition-colors">
-                                <i class="fa-brands fa-facebook fa-2x"></i>
-                            </a>
-                        </li>
-                        <li class="flex items-center justify-center">
-                            <a href="http://www.instagram.com/qr_gen3?igsh=eGJ2NWtqeHg1eDd1" class="hover:text-pink-500 transition-colors">
-                                <i class="fa-brands fa-square-instagram fa-2x"></i>
-                            </a>
-                        </li>
-                    </ul>
+                    <a
+                        id="orderInstagram"
+                        href="https://ig.me/m/qr_gen3"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center gap-3 btn-primary px-8 py-4 rounded-full font-black mt-10"
+                    >
+                        <i class="fa-brands fa-instagram text-xl"></i>
+                        Order Now
+                    </a>
+                    <p class="text-gray-500 text-xs mt-4">Contact us for current pricing, availability and customization.</p>
                 </div>
-
-                <div class="space-y-3">
-                    <h3 class="text-white font-bold text-base border-b border-brandTeal/40 pb-2 inline-block">Order & Customization</h3>
-                    <p class="text-gray-400 text-xs sm:text-sm">
-                        Message us directly for physical keychains, helmet stickers, and customized bulk orders!
-                    </p>
+                <div class="reveal flex justify-center active">
+                    <div class="bg-white/10 border border-white/10 rounded-3xl p-8 text-center w-full max-w-sm">
+                        <div class="bg-gradient-to-br from-gray-200 to-gray-400 rounded-2xl flex items-center justify-center overflow-hidden">
+                            <img
+                                src="images/3.jfif"
+                                alt="QRGen Smart Safety Keychain"
+                                class="w-full h-full object-contain p-4"
+                            >
+                        </div>
+                        <h3 class="text-white text-xl font-bold mt-6">
+                            QRGen Smart Safety Keychain
+                        </h3>
+                        <p class="text-gray-400 text-sm mt-2">
+                            Your safety, just one scan away.
+                        </p>
+                    </div>
                 </div>
 
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <footer class="bg-brandDark py-6 border-t border-gray-800 text-center text-xs text-gray-500">
-        © 2026 QRGen Smart Emergency Profile. All rights reserved.
-    </footer>
 
-    <script>
-        const qrForm = document.getElementById('qrForm');
-        const qrcodeDiv = document.getElementById('qrcode');
-        const qrContainer = document.getElementById('qrContainer');
-        const placeholder = document.getElementById('placeholder');
-        const downloadBtn = downloadBtn = document.getElementById('downloadBtn');
-        const errorBox = document.getElementById('errorBox');
+<!-- CUSTOMIZATION SECTION -->
+<section id="customize" class="py-20 px-6 bg-[#f8f7f2]">
+  <div class="max-w-7xl mx-auto">
 
-        if (qrForm) {
-            qrForm.addEventListener('submit', function (e) {
-                e.preventDefault();
+    <!-- Section Heading -->
+    <div class="text-center max-w-2xl mx-auto mb-14">
+      <span class="text-[#b58b45] font-semibold tracking-[3px] uppercase text-sm">
+        Made Just For You
+      </span>
 
-                const name = document.getElementById('fullName').value.trim();
-                const phone = document.getElementById('phoneNumber').value.trim();
-                const address = document.getElementById('homeAddress').value.trim();
+      <h2 class="text-3xl md:text-5xl font-bold text-[#0b383e] mt-4 mb-5">
+        Your Style, Your Choice
+      </h2>
 
-                errorBox.classList.add('hidden');
+      <p class="text-gray-600 text-lg leading-relaxed">
+        Why settle for ordinary? Customize your QRGen keychain
+        according to your personal style. Choose your favorite
+        colors and add charms that make it uniquely yours.
+      </p>
+    </div>
 
-                if (name.length < 3 || phone.length < 10 || address.length < 5) {
-                    errorBox.innerText = "Meharbani karke tamam details sahi se fill karein.";
-                    errorBox.classList.remove('hidden');
-                    return;
-                }
+    <!-- Customization Cards -->
+    <div class="grid md:grid-cols-2 gap-8">
 
-                const baseUrl = "https://qr-gen-mauve.vercel.app";
-                const profileUrl = `${baseUrl}/profile.html?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&address=${encodeURIComponent(address)}`;
+      <!-- Color Customization -->
+      <div class="bg-white rounded-3xl overflow-hidden shadow-lg group">
+        <div class="relative overflow-hidden">
+          <img
+            src="images/color.jfif"
+            alt="Color customization inspiration"
+            class="w-full h-72 object-cover group-hover:scale-105 transition duration-500"
+          />
 
-                qrcodeDiv.innerHTML = "";
+          <span class="absolute top-5 left-5 bg-white text-[#0b383e] px-4 py-2 rounded-full text-sm font-semibold">
+            01 — Choose Your Colors
+          </span>
+        </div>
 
-                new QRCode(qrcodeDiv, {
-                    text: profileUrl,
-                    width: 180,
-                    height: 180,
-                    colorDark: "#1a232a",
-                    colorLight: "#ffffff",
-                    correctLevel: QRCode.CorrectLevel.H
-                });
+        <div class="p-8">
+          <h3 class="text-2xl font-bold text-[#0b383e] mb-3">
+            Colors That Match Your Style
+          </h3>
 
-                placeholder.classList.add('hidden');
-                qrContainer.classList.remove('hidden');
-            });
+          <p class="text-gray-600 leading-relaxed">
+            From elegant neutrals to bold and vibrant shades,
+            choose a color combination that reflects your
+            personality. Your keychain, your favorite colors!
+          </p>
+        </div>
+      </div>
+
+      <!-- Charms Customization -->
+      <div class="bg-white rounded-3xl overflow-hidden shadow-lg group">
+        <div class="relative overflow-hidden">
+          <img
+            src="images/charms.webp"
+            alt="Decorative charms inspiration"
+            class="w-full h-72 object-cover group-hover:scale-105 transition duration-500"
+          />
+
+          <span class="absolute top-5 left-5 bg-white text-[#0b383e] px-4 py-2 rounded-full text-sm font-semibold">
+            02 — Pick Your Charms
+          </span>
+        </div>
+
+        <div class="p-8">
+          <h3 class="text-2xl font-bold text-[#0b383e] mb-3">
+            Add Charms You Love
+          </h3>
+
+          <p class="text-gray-600 leading-relaxed">
+            Make your keychain extra special by choosing from
+            our different charm designs. Pick your favorites
+            and create a combination that is truly yours.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom CTA -->
+    <div class="text-center mt-12">
+      <p class="text-[#0b383e] font-semibold text-lg mb-5">
+        Have a design in mind? Let's create it together!
+      </p>
+
+      <a
+        href="https://ig.me/m/qr_gen3"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-3 bg-[#0b383e] hover:bg-[#14545a] text-white px-8 py-4 rounded-full font-semibold transition duration-300 shadow-lg"
+    >
+        <i class="fab fa-instagram text-xl"></i>
+        Customize Your Keychain
+    </a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- QRGEN 3D SPHERE GALLERY -->
+
+<section id="qr-sphere-gallery">
+
+    <div class="qr-sphere-gallery-container">
+
+        <div class="qr-sphere-gallery-heading">
+
+            <span class="text-[#b58b45] font-semibold tracking-[3px] uppercase text-sm">
+                Explore Our Collection
+            </span>
+
+            <h2 class="mt-4">
+                Meet Your QRGen Keychain
+            </h2>
+
+            <p>
+                Explore our collection from every angle.
+                Drag to rotate and click to explore.
+            </p>
+
+        </div>
+
+        <div id="qrSphereGallery" class="qr-sphere-stage">
+
+            <div id="qrSphereStage"></div>
+
+        </div>
+
+        <!-- <div class="qr-sphere-controls">
+            Drag to rotate · Click any keychain to highlight it
+        </div> -->
+
+    </div>
+
+</section>
+
+
+<script>
+
+(function () {
+
+    const gallery = document.getElementById("qrSphereGallery");
+    const stage = document.getElementById("qrSphereStage");
+
+    if (!gallery || !stage) return;
+
+    // Replace these image paths with your own keychain images later.
+
+    const imageUrls = [
+        "images/6.jfif",
+        "images/2.jfif",
+        "images/3.jfif",
+        "images/4.jfif",
+        "images/7.jfif",
+        "images/2.jfif",
+        "images/88.jfif",
+        "images/5.jfif",
+        "images/1.jfif",
+        "images/1.jfif",
+        "images/88.jfif",
+        "images/3.jfif"
+    ];
+
+    const items = [];
+
+    const totalItems = imageUrls.length;
+
+    const sphereRadius = 240;
+
+    let rotationX = 0;
+    let rotationY = 0;
+
+    let velocityX = 0;
+    let velocityY = 0;
+
+    let isDragging = false;
+
+    let previousX = 0;
+    let previousY = 0;
+
+    let hasMoved = false;
+
+    let selectedItem = null;
+
+    // CREATE SPHERE ITEMS
+
+    imageUrls.forEach((url, index) => {
+
+        const item = document.createElement("div");
+
+        item.className = "qr-sphere-item";
+
+        const image = document.createElement("img");
+
+        image.src = url;
+
+        image.alt = "QRGen Keychain " + (index + 1);
+
+        image.draggable = false;
+
+        item.appendChild(image);
+
+        stage.appendChild(item);
+
+        const phi = Math.acos(1 - 2 * (index + 0.5) / totalItems);
+
+        const theta = Math.PI * (1 + Math.sqrt(5)) * index;
+
+        const x = Math.cos(theta) * Math.sin(phi);
+
+        const y = Math.cos(phi);
+
+        const z = Math.sin(theta) * Math.sin(phi);
+
+        items.push({
+            element: item,
+            x: x,
+            y: y,
+            z: z
+        });
+
+        item.addEventListener("click", function () {
+
+            if (hasMoved) return;
+
+            if (selectedItem) {
+                selectedItem.classList.remove("active");
+            }
+
+            selectedItem = item;
+
+            item.classList.add("active");
+
+        });
+
+    });
+
+
+    // SPHERE ROTATION AND BILLBOARD EFFECT
+
+    function renderSphere() {
+
+        const width = gallery.clientWidth;
+
+        const height = gallery.clientHeight;
+
+        const radius = Math.min(
+            sphereRadius,
+            width * 0.34,
+            height * 0.42
+        );
+
+        const sinX = Math.sin(rotationX);
+        const cosX = Math.cos(rotationX);
+
+        const sinY = Math.sin(rotationY);
+        const cosY = Math.cos(rotationY);
+
+        items.forEach(item => {
+
+            // Rotate around Y axis
+
+            let x = item.x * cosY - item.z * sinY;
+
+            let z = item.x * sinY + item.z * cosY;
+
+            let y = item.y;
+
+            // Rotate around X axis
+
+            const rotatedY = y * cosX - z * sinX;
+
+            const rotatedZ = y * sinX + z * cosX;
+
+            y = rotatedY;
+
+            z = rotatedZ;
+
+            const screenX = x * radius;
+
+            const screenY = y * radius;
+
+            const screenZ = z * radius;
+
+            // Perspective scaling
+
+            const scale = 0.65 + ((z + 1) / 2) * 0.45;
+
+            // Depth-based opacity
+
+            const opacity = 0.45 + ((z + 1) / 2) * 0.55;
+
+            item.element.style.transform =
+                `translate3d(${screenX}px, ${screenY}px, ${screenZ}px) translate(-50%, -50%) scale(${scale})`;
+
+            item.element.style.opacity = opacity;
+
+            item.element.style.zIndex =
+                Math.round((z + 1) * 100);
+
+        });
+
+    }
+
+
+    // POINTER DRAG CONTROLS
+
+    gallery.addEventListener("pointerdown", function (event) {
+
+        isDragging = true;
+
+        hasMoved = false;
+
+        previousX = event.clientX;
+
+        previousY = event.clientY;
+
+        velocityX = 0;
+
+        velocityY = 0;
+
+    });
+
+
+    gallery.addEventListener("pointermove", function (event) {
+
+        if (!isDragging) return;
+
+        const deltaX = event.clientX - previousX;
+
+        const deltaY = event.clientY - previousY;
+
+        if (Math.abs(deltaX) > 2 || Math.abs(deltaY) > 2) {
+            hasMoved = true;
         }
 
-        if (downloadBtn) {
-            downloadBtn.addEventListener('click', function () {
-                const img = qrcodeDiv.querySelector('img');
-                const canvas = qrcodeDiv.querySelector('canvas');
-                const link = document.createElement('a');
-                link.download = 'QRGen-Safety-Code.png';
+        rotationY += deltaX * 0.005;
 
-                if (img && img.src) {
-                    link.href = img.src;
-                    link.click();
-                } else if (canvas) {
-                    link.href = canvas.toDataURL('image/png');
-                    link.click();
-                }
-            });
+        rotationX += deltaY * 0.005;
+
+        velocityY = deltaX * 0.0008;
+
+        velocityX = deltaY * 0.0008;
+
+        previousX = event.clientX;
+
+        previousY = event.clientY;
+
+        renderSphere();
+
+    });
+
+
+    function stopDragging() {
+
+        isDragging = false;
+
+    }
+
+    gallery.addEventListener("pointerup", stopDragging);
+
+    gallery.addEventListener("pointerleave", stopDragging);
+
+    gallery.addEventListener("pointercancel", stopDragging);
+
+
+    // ANIMATION LOOP WITH INERTIA
+
+    function animate() {
+
+        if (!isDragging) {
+
+            rotationX += velocityX;
+
+            rotationY += velocityY;
+
+            velocityX *= 0.95;
+
+            velocityY *= 0.95;
+
         }
-    </script>
+
+        renderSphere();
+
+        requestAnimationFrame(animate);
+
+    }
+
+
+    // INITIAL RENDER
+
+    renderSphere();
+
+    animate();
+
+})();
+
+</script>
+
+
+<!-- FAQ -->
+<section id="faq" class="py-24 bg-white">
+    <div class="max-w-3xl mx-auto px-6">
+        <div class="text-center mb-14 reveal">
+            <span class="text-teal font-bold text-sm tracking-widest">GOT QUESTIONS?</span>
+            <h2 class="text-3xl sm:text-5xl font-black text-dark mt-4">Frequently Asked Questions</h2>
+            <p class="text-gray-500 mt-4">Everything you need to know about QRGen.</p>
+        </div>
+
+        <div class="space-y-4">
+
+            <div class="border border-gray-200 rounded-2xl p-6 reveal">
+                <button class="faq-question w-full flex justify-between items-center text-left font-bold">
+                    What is QRGen?
+                    <i class="fa-solid fa-plus text-teal"></i>
+                </button>
+                <div class="faq-answer">
+                    <p class="text-gray-500 text-sm leading-7 pt-4">
+                        QRGen is a smart safety solution that uses a QR code linked to an emergency profile containing important contact information.
+                    </p>
+                </div>
+            </div>
+
+            <div class="border border-gray-200 rounded-2xl p-6 reveal">
+                <button class="faq-question w-full flex justify-between items-center text-left font-bold">
+                    How does someone scan my QR code?
+                    <i class="fa-solid fa-plus text-teal"></i>
+                </button>
+                <div class="faq-answer">
+                    <p class="text-gray-500 text-sm leading-7 pt-4">
+                        A person can use a compatible smartphone camera or QR scanner application to scan the code and open your linked profile.
+                    </p>
+                </div>
+            </div>
+
+            <div class="border border-gray-200 rounded-2xl p-6 reveal">
+                <button class="faq-question w-full flex justify-between items-center text-left font-bold">
+                    Do I need a special application?
+                    <i class="fa-solid fa-plus text-teal"></i>
+                </button>
+                <div class="faq-answer">
+                    <p class="text-gray-500 text-sm leading-7 pt-4">
+                        No special QRGen application is required to scan a standard QR code. A compatible smartphone camera and internet connection are needed to access the online profile.
+                    </p>
+                </div>
+            </div>
+
+            <div class="border border-gray-200 rounded-2xl p-6 reveal">
+                <button class="faq-question w-full flex justify-between items-center text-left font-bold">
+                    How can I order QRGen?
+                    <i class="fa-solid fa-plus text-teal"></i>
+                </button>
+                <div class="faq-answer">
+                    <p class="text-gray-500 text-sm leading-7 pt-4">
+                        You can contact our team through WhatsApp or our social media pages to ask about pricing, customization and availability.
+                    </p>
+                </div>
+            </div>
+
+            <div class="border border-gray-200 rounded-2xl p-6 reveal">
+                <button class="faq-question w-full flex justify-between items-center text-left font-bold">
+                    Is QRGen a replacement for emergency services?
+                    <i class="fa-solid fa-plus text-teal"></i>
+                </button>
+                <div class="faq-answer">
+                    <p class="text-gray-500 text-sm leading-7 pt-4">
+                        No. QRGen helps people access emergency contact information. It does not replace professional medical assistance or emergency services.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- FINAL CTA -->
+<!-- <section class=" py-20 text-center px-6">
+    <div class="max-w-3xl mx-auto reveal">
+        <img src="images/logo.png" alt="QRGen Logo" class="w-20 h-20 object-contain mx-auto mb-6">
+        <h2 class="text-3xl sm:text-5xl text-white font-black leading-tight">
+            Safety Should Never Be an Afterthought.
+        </h2>
+        <p class="text-gray-300 mt-6 leading-7">
+            One small accessory. One smart connection. A little more peace of mind.
+        </p>
+        <a href="#order" class="inline-block btn-primary rounded-full px-9 py-4 font-black mt-8">
+            Get Started with QRGen <i class="fa-solid fa-arrow-right ml-2"></i>
+        </a>
+    </div>
+</section> -->
+
+
+<!-- FOOTER -->
+<footer class="bg-[#0b2020] text-white pt-16 pb-8">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-white/10">
+
+            <div>
+                <div class="flex items-center gap-3">
+                    <img src="images/logo.png" alt="QRGen" class="w-12 h-12 object-contain">
+                    <h2 class="font-black text-2xl">QR<span class="text-gold">GEN</span></h2>
+                </div>
+                <p class="text-gray-400 text-sm leading-7 mt-5">
+                    Smart emergency profiles designed to make important contact information accessible when it matters.
+                </p>
+            </div>
+
+            <div>
+                <h3 class="font-bold text-lg mb-5">Quick Links</h3>
+                <div class="space-y-3 text-sm text-gray-400">
+                    <a href="#home" class="block hover:text-gold">Home</a>
+                    <a href="#features" class="block hover:text-gold">Features</a>
+                    <a href="#how-it-works" class="block hover:text-gold">How It Works</a>
+                    <a href="#qr-sphere-gallery" class="block hover:text-gold">Collection</a>
+                    <a href="#faq" class="block hover:text-gold">FAQs</a>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="font-bold text-lg mb-5">Connect With Us</h3>
+                <div class="flex gap-4 text-2xl">
+                    <!-- <a href="https://www.facebook.com/share/199sh1EPkL/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="hover:text-blue-400 transition"><i class="fa-brands fa-facebook"></i></a> -->
+                    <a href="https://www.instagram.com/qr_gen3/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="hover:text-pink-400 transition"><i class="fa-brands fa-instagram"></i></a>
+                    <!-- <a href="https://wa.me/923001234567" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="hover:text-green-400 transition"><i class="fa-brands fa-whatsapp"></i></a> -->
+                </div>
+            </div>
+
+            <div>
+                <h3 class="font-bold text-lg mb-5">Need Help?</h3>
+                <p class="text-gray-400 text-sm leading-7">
+                    Have questions about our products or bulk orders? Get in touch with our team.
+                </p>
+                <a href="#order" class="text-gold text-sm font-bold mt-4 inline-block">Contact Our Team →</a>
+            </div>
+
+        </div>
+
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-8 text-gray-500 text-xs">
+            <p>© 2026 QRGen. All Rights Reserved.</p>
+            <p>Designed for a safer tomorrow. <i class="fa-solid fa-heart text-gold"></i></p>
+        </div>
+    </div>
+</footer>
+
+
+<!-- FLOATING WHATSAPP -->
+<a
+    href="https://ig.me/m/qr_gen3"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Message QRGen on Instagram"
+    class="fixed bottom-6 right-6 z-50 bg-[#E1306C] hover:bg-[#C13584] text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-3xl transition hover:scale-110"
+>
+    <i class="fa-brands fa-instagram"></i>
+</a>
+
+
+<script>
+
+// MOBILE MENU
+const menuBtn = document.getElementById('menuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+
+menuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+});
+
+mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+    });
+});
+
+
+// SCROLL ANIMATIONS
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+        }
+    });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(element => {
+    observer.observe(element);
+});
+
+
+// FAQ ACCORDION
+document.querySelectorAll('.faq-question').forEach(button => {
+    button.addEventListener('click', () => {
+        const answer = button.nextElementSibling;
+        const icon = button.querySelector('i');
+        const isOpen = answer.classList.contains('open');
+
+        document.querySelectorAll('.faq-answer').forEach(item => {
+            item.classList.remove('open');
+        });
+
+        document.querySelectorAll('.faq-question i').forEach(item => {
+            item.className = 'fa-solid fa-plus text-teal';
+        });
+
+        if (!isOpen) {
+            answer.classList.add('open');
+            icon.className = 'fa-solid fa-minus text-teal';
+        }
+    });
+});
+
+
+// QR GENERATOR
+const qrForm = document.getElementById('qrForm');
+const qrcodeDiv = document.getElementById('qrcode');
+const qrContainer = document.getElementById('qrContainer');
+const placeholder = document.getElementById('placeholder');
+const downloadBtn = document.getElementById('downloadBtn');
+const errorBox = document.getElementById('errorBox');
+
+qrForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById('fullName').value.trim();
+    const phone = document.getElementById('phoneNumber').value.trim();
+    const address = document.getElementById('homeAddress').value.trim();
+
+    errorBox.classList.add('hidden');
+
+    if (!/^\+?[\d\s()-]{10,20}$/.test(phone) ||
+        name.length < 3 || address.length < 5) {
+        errorBox.innerText = 'Please enter valid details.';
+        errorBox.classList.remove('hidden');
+        return;
+    }
+
+    // Demo QR only. Do not encode sensitive personal information.
+    const demoUrl = 'https://qr-gen-mauve.vercel.app/';
+
+    qrcodeDiv.innerHTML = '';
+
+    new QRCode(qrcodeDiv, {
+        text: demoUrl,
+        width: 200,
+        height: 200,
+        colorDark: '#102c2c',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H
+    });
+
+    placeholder.classList.add('hidden');
+    qrContainer.classList.remove('hidden');
+});
+
+downloadBtn.addEventListener('click', function() {
+    const canvas = qrcodeDiv.querySelector('canvas');
+    const img = qrcodeDiv.querySelector('img');
+
+    const link = document.createElement('a');
+    link.download = 'QRGen-Sample-QR.png';
+
+    if (canvas) {
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    } else if (img && img.src) {
+        link.href = img.src;
+        link.click();
+    }
+});
+
+</script>
+
+<script>
+    const keychainImages = [
+        "images/1.jfif",
+        "images/2.jfif",
+        "images/3.jfif"
+    ];
+
+    const keychainSlider = document.getElementById("keychainSlider");
+
+    let currentImage = 0;
+
+    setInterval(() => {
+
+        keychainSlider.classList.remove("opacity-100");
+        keychainSlider.classList.add("opacity-0");
+
+        setTimeout(() => {
+
+            currentImage = (currentImage + 1) % keychainImages.length;
+
+            keychainSlider.src = keychainImages[currentImage];
+
+            keychainSlider.classList.remove("opacity-0");
+            keychainSlider.classList.add("opacity-100");
+
+        }, 700);
+
+    }, 2500);
+</script>
+
 </body>
 </html>
