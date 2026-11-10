@@ -374,84 +374,119 @@
 
 
 <!-- FEATURES -->
-<section id="features" class="py-24">
+<section id="features" class="py-24 overflow-hidden">
     <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center max-w-2xl mx-auto mb-16 reveal">
-            <span class="text-teal font-bold text-sm tracking-widest uppercase">Why QRGen?</span>
+
+        <!-- Heading -->
+        <div class="text-center max-w-2xl mx-auto mb-14 reveal active">
+            <span class="text-teal font-bold text-sm tracking-widest uppercase">
+                Why QRGen?
+            </span>
+
             <h2 class="text-3xl sm:text-5xl font-black text-dark mt-4 leading-tight">
                 More Than Just a Keychain.
             </h2>
+
             <p class="text-gray-500 mt-5 leading-7">
                 A simple way to make important emergency contact information accessible when it matters most.
             </p>
         </div>
 
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- 3D Slider -->
+        <div class="qr-slider relative mx-auto">
 
-            <div class="reveal bg-white p-8 rounded-3xl border border-gray-100 hover:shadow-xl transition">
-                <div class="w-14 h-14 bg-teal/10 rounded-2xl flex items-center justify-center text-teal text-2xl">
-                    <i class="fa-solid fa-qrcode"></i>
+            <div class="qr-stage" id="qrStage">
+
+                <div class="qr-card" style="z-index: 4; opacity: 1; transform: translateX(-380px) translateZ(-180px) scale(0.76); pointer-events: none;">
+                    <div class="qr-card-inner bg-white">
+                        <div class="qr-icon bg-teal/10 text-teal">
+                            <i class="fa-solid fa-qrcode"></i>
+                        </div>
+                        <h3>Instant QR Scanning</h3>
+                        <p>
+                            Anyone with a compatible smartphone camera can scan your QR code and access your emergency profile.
+                        </p>
+                    </div>
                 </div>
-                <h3 class="font-black text-xl mt-6 mb-3">Instant QR Scanning</h3>
-                <p class="text-gray-500 text-sm leading-7">
-                    Anyone with a compatible smartphone camera can scan your QR code and access your emergency profile.
-                </p>
+
+                <div class="qr-card" style="z-index: 5; opacity: 1; transform: translateX(-190px) translateZ(-90px) scale(0.88); pointer-events: none;">
+                    <div class="qr-card-inner bg-white">
+                        <div class="qr-icon bg-amber-100 text-amber-600">
+                            <i class="fa-solid fa-phone-volume"></i>
+                        </div>
+                        <h3>Emergency Contacts</h3>
+                        <p>
+                            Make primary and secondary emergency contact details accessible through your safety profile.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="qr-card" style="z-index: 6; opacity: 1; transform: translateX(0px) translateZ(0px) scale(1); pointer-events: auto;">
+                    <div class="qr-card-inner bg-white">
+                        <div class="qr-icon bg-purple-100 text-purple-600">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <h3>Address Information</h3>
+                        <p>
+                            Provide important address information to help others understand where to reach your family.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="qr-card" style="z-index: 5; opacity: 1; transform: translateX(190px) translateZ(-90px) scale(0.88); pointer-events: none;">
+                    <div class="qr-card-inner bg-white">
+                        <div class="qr-icon bg-green-100 text-green-600">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <h3>Safety Purpose</h3>
+                        <p>
+                            A useful safety accessory for children, parents, elderly family members, pets, specially-abled individuals, tourists and everyday commuters.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="qr-card" style="z-index: 4; opacity: 1; transform: translateX(380px) translateZ(-180px) scale(0.76); pointer-events: none;">
+                    <div class="qr-card-inner bg-white">
+                        <div class="qr-icon bg-indigo-100 text-indigo-600">
+                            <i class="fa-solid fa-id-card"></i>
+                        </div>
+                        <h3>Personalized QR Identity</h3>
+                        <p>
+                            Every QRGen keychain comes with a unique QR code linked to an individual's emergency profile.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="qr-card" style="z-index: 3; opacity: 0; transform: translateX(570px) translateZ(-270px) scale(0.64); pointer-events: none;">
+                    <div class="qr-card-inner bg-white">
+                        <div class="qr-icon bg-pink-100 text-pink-600">
+                            <i class="fa-solid fa-bag-shopping"></i>
+                        </div>
+                        <h3>Everyday Portability</h3>
+                        <p>
+                            Attach your QRGen accessory to your keys, bag or other compatible belongings.
+                        </p>
+                    </div>
+                </div>
+
             </div>
 
-            <div class="reveal bg-white p-8 rounded-3xl border border-gray-100 hover:shadow-xl transition">
-                <div class="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center text-amber-600 text-2xl">
-                    <i class="fa-solid fa-phone-volume"></i>
-                </div>
-                <h3 class="font-black text-xl mt-6 mb-3">Emergency Contacts</h3>
-                <p class="text-gray-500 text-sm leading-7">
-                    Make primary and secondary emergency contact details accessible through your safety profile.
-                </p>
-            </div>
+            <!-- Navigation -->
+            <div class="flex justify-center items-center gap-5 mt-8 relative z-10">
+                <button id="qrPrev" class="w-12 h-12 rounded-full border border-gray-200 text-dark hover:bg-teal hover:text-white transition">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
 
-            <div class="reveal bg-white p-8 rounded-3xl border border-gray-100 hover:shadow-xl transition">
-                <div class="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center text-purple-600 text-2xl">
-                    <i class="fa-solid fa-location-dot"></i>
-                </div>
-                <h3 class="font-black text-xl mt-6 mb-3">Address Information</h3>
-                <p class="text-gray-500 text-sm leading-7">
-                    Provide important address information to help others understand where to reach your family.
-                </p>
-            </div>
+                <div id="qrDots" class="flex gap-2"><button class="qr-dot" aria-label="Go to feature 1"></button><button class="qr-dot" aria-label="Go to feature 2"></button><button class="qr-dot active" aria-label="Go to feature 3"></button><button class="qr-dot" aria-label="Go to feature 4"></button><button class="qr-dot" aria-label="Go to feature 5"></button><button class="qr-dot" aria-label="Go to feature 6"></button></div>
 
-            <div class="reveal bg-white p-8 rounded-3xl border border-gray-100 hover:shadow-xl transition">
-                <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center text-green-600 text-2xl">
-                    <i class="fa-solid fa-users"></i>
-                </div>
-                <h3 class="font-black text-xl mt-6 mb-3">Safety Purpose</h3>
-                <p class="text-gray-500 text-sm leading-7">
-                    A useful safety accessory for children, parents, elderly family members, Pets, Specially-abled, Tourists and everyday commuters.
-                </p>
-            </div>
-
-            <div class="reveal bg-white p-8 rounded-3xl border border-gray-100 hover:shadow-xl transition">
-                <div class="w-14 h-14 bg-indigo-100 rounded-2xl flex items-center justify-center text-indigo-600 text-2xl">
-                    <i class="fa-solid fa-id-card"></i>
-                </div>
-                <h3 class="font-black text-xl mt-6 mb-3">Personalized QR Identity</h3>
-                <p class="text-gray-500 text-sm leading-7">
-                    Every QRGen keychain comes with a unique QR code linked to an individual's emergency profile, making information easy to access when needed.
-                </p>
-            </div>
-
-            <div class="reveal bg-white p-8 rounded-3xl border border-gray-100 hover:shadow-xl transition">
-                <div class="w-14 h-14 bg-pink-100 rounded-2xl flex items-center justify-center text-pink-600 text-2xl">
-                    <i class="fa-solid fa-bag-shopping"></i>
-                </div>
-                <h3 class="font-black text-xl mt-6 mb-3">Everyday Portability</h3>
-                <p class="text-gray-500 text-sm leading-7">
-                    Attach your QRGen accessory to your keys, bag or other compatible belongings.
-                </p>
+                <button id="qrNext" class="w-12 h-12 rounded-full border border-gray-200 text-dark hover:bg-teal hover:text-white transition">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
             </div>
 
         </div>
     </div>
 </section>
-
 
 <!-- HOW IT WORKS -->
 <section id="how-it-works" class="bg-dark text-white py-24">
