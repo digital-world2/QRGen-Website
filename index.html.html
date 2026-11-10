@@ -1694,5 +1694,90 @@ downloadBtn.addEventListener('click', function() {
     }, 2500);
 </script>
 
+<script>
+(function () {
+    const stage = document.getElementById('qrStage');
+    if (!stage) return;
+
+    const cards = Array.from(stage.querySelectorAll('.qr-card'));
+    const dots = document.getElementById('qrDots');
+
+    let current = 0;
+    let timer;
+
+    cards.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'qr-dot';
+        dot.setAttribute('aria-label', 'Go to feature ' + (i + 1));
+        dot.addEventListener('click', () => {
+            current = i;
+            updateSlider();
+            restartTimer();
+        });
+        dots.appendChild(dot);
+    });
+
+    function updateSlider() {
+        const total = cards.length;
+
+        cards.forEach((card, i) => {
+            let offset = i - current;
+
+            if (offset > total / 2) offset -= total;
+            if (offset < -total / 2) offset += total;
+
+            const abs = Math.abs(offset);
+
+            card.style.zIndex = total - abs;
+            card.style.opacity = abs > 2 ? 0 : 1;
+
+            card.style.transform = `
+                translateX(${offset * 190}px)
+                translateZ(${-abs * 90}px)
+                scale(${1 - abs * .12})
+            `;
+
+            card.style.pointerEvents = abs === 0 ? 'auto' : 'none';
+        });
+
+        Array.from(dots.children).forEach((dot, i) => {
+            dot.classList.toggle('active', i === current);
+        });
+    }
+
+    function next() {
+        current = (current + 1) % cards.length;
+        updateSlider();
+    }
+
+    function prev() {
+        current = (current - 1 + cards.length) % cards.length;
+        updateSlider();
+    }
+
+    function restartTimer() {
+        clearInterval(timer);
+        timer = setInterval(next, 3500);
+    }
+
+    document.getElementById('qrNext').addEventListener('click', () => {
+        next();
+        restartTimer();
+    });
+
+    document.getElementById('qrPrev').addEventListener('click', () => {
+        prev();
+        restartTimer();
+    });
+
+    updateSlider();
+    restartTimer();
+
+    stage.addEventListener('mouseenter', () => clearInterval(timer));
+    stage.addEventListener('mouseleave', restartTimer);
+
+})();
+</script>
+
 </body>
 </html>
