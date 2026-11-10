@@ -463,11 +463,11 @@
 
 
 <!-- FEATURES -->
-<section id="features" class="py-24 overflow-hidden">
+<section id="features" class="py-24 overflow-hidden bg-white">
     <div class="max-w-7xl mx-auto px-6">
 
         <!-- Heading -->
-        <div class="text-center max-w-2xl mx-auto mb-14 reveal active">
+        <div class="text-center max-w-2xl mx-auto mb-14 reveal">
             <span class="text-teal font-bold text-sm tracking-widest uppercase">
                 Why QRGen?
             </span>
@@ -486,7 +486,7 @@
 
             <div class="qr-stage" id="qrStage">
 
-                <div class="qr-card" style="z-index: 4; opacity: 1; transform: translateX(-380px) translateZ(-180px) scale(0.76); pointer-events: none;">
+                <div class="qr-card">
                     <div class="qr-card-inner bg-white">
                         <div class="qr-icon bg-teal/10 text-teal">
                             <i class="fa-solid fa-qrcode"></i>
@@ -498,7 +498,7 @@
                     </div>
                 </div>
 
-                <div class="qr-card" style="z-index: 5; opacity: 1; transform: translateX(-190px) translateZ(-90px) scale(0.88); pointer-events: none;">
+                <div class="qr-card">
                     <div class="qr-card-inner bg-white">
                         <div class="qr-icon bg-amber-100 text-amber-600">
                             <i class="fa-solid fa-phone-volume"></i>
@@ -510,7 +510,7 @@
                     </div>
                 </div>
 
-                <div class="qr-card" style="z-index: 6; opacity: 1; transform: translateX(0px) translateZ(0px) scale(1); pointer-events: auto;">
+                <div class="qr-card">
                     <div class="qr-card-inner bg-white">
                         <div class="qr-icon bg-purple-100 text-purple-600">
                             <i class="fa-solid fa-location-dot"></i>
@@ -522,7 +522,7 @@
                     </div>
                 </div>
 
-                <div class="qr-card" style="z-index: 5; opacity: 1; transform: translateX(190px) translateZ(-90px) scale(0.88); pointer-events: none;">
+                <div class="qr-card">
                     <div class="qr-card-inner bg-white">
                         <div class="qr-icon bg-green-100 text-green-600">
                             <i class="fa-solid fa-users"></i>
@@ -534,7 +534,7 @@
                     </div>
                 </div>
 
-                <div class="qr-card" style="z-index: 4; opacity: 1; transform: translateX(380px) translateZ(-180px) scale(0.76); pointer-events: none;">
+                <div class="qr-card">
                     <div class="qr-card-inner bg-white">
                         <div class="qr-icon bg-indigo-100 text-indigo-600">
                             <i class="fa-solid fa-id-card"></i>
@@ -546,7 +546,7 @@
                     </div>
                 </div>
 
-                <div class="qr-card" style="z-index: 3; opacity: 0; transform: translateX(570px) translateZ(-270px) scale(0.64); pointer-events: none;">
+                <div class="qr-card">
                     <div class="qr-card-inner bg-white">
                         <div class="qr-icon bg-pink-100 text-pink-600">
                             <i class="fa-solid fa-bag-shopping"></i>
@@ -562,13 +562,15 @@
 
             <!-- Navigation -->
             <div class="flex justify-center items-center gap-5 mt-8 relative z-10">
-                <button id="qrPrev" class="w-12 h-12 rounded-full border border-gray-200 text-dark hover:bg-teal hover:text-white transition">
+                <button id="qrPrev"
+                    class="w-12 h-12 rounded-full border border-gray-200 text-dark hover:bg-teal hover:text-white transition">
                     <i class="fa-solid fa-arrow-left"></i>
                 </button>
 
-                <div id="qrDots" class="flex gap-2"><button class="qr-dot" aria-label="Go to feature 1"></button><button class="qr-dot" aria-label="Go to feature 2"></button><button class="qr-dot active" aria-label="Go to feature 3"></button><button class="qr-dot" aria-label="Go to feature 4"></button><button class="qr-dot" aria-label="Go to feature 5"></button><button class="qr-dot" aria-label="Go to feature 6"></button></div>
+                <div id="qrDots" class="flex gap-2"></div>
 
-                <button id="qrNext" class="w-12 h-12 rounded-full border border-gray-200 text-dark hover:bg-teal hover:text-white transition">
+                <button id="qrNext"
+                    class="w-12 h-12 rounded-full border border-gray-200 text-dark hover:bg-teal hover:text-white transition">
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
@@ -576,7 +578,7 @@
         </div>
     </div>
 </section>
-
+    
 <!-- HOW IT WORKS -->
 <section id="how-it-works" class="bg-dark text-white py-24">
     <div class="max-w-7xl mx-auto px-6">
